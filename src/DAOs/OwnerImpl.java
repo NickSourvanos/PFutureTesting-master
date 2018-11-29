@@ -18,27 +18,22 @@ public class OwnerImpl implements OwnerDAO{
             throws SQLException {
 
         Owner owner = null;
-        Connection connection = null;
         List<Vehicle> vehicles = new ArrayList<>();
         String query = "SELECT PLATE FROM OWNER O\n" +
                 " INNER JOIN VEHICLE V ON(O.ID = V.OWNER_ID)\n" +
                 " INNER JOIN INSURANCE_VEHICLE IV ON(IV.VEHICLE_ID = V.ID)\n" +
                 " WHERE FIRST_NAME = \""+ firstName + "\" AND LAST_NAME = \""
                 + lastName + "\" AND IV.INSURANCE_ID IS NULL;";
-        try{
-            connection = DatabaseConnection.getDatabaseConnection();
+        ResultSet set = null;
 
-            Statement statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(query);
+        try(Statement connection = DatabaseConnection.getDatabaseConnection().createStatement()){
+            set = connection.executeQuery(query);
             while(set.next()){
                 vehicles.add(new Vehicle(set.getString(1)));
             }
-
             owner = new Owner(firstName, lastName, vehicles);
 
-        }catch(ClassNotFoundException e){}
-        finally { connection.close(); }
-
+        } finally { set.close(); }
 
         return owner;
     }

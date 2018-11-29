@@ -3,6 +3,8 @@
 import DAOs.OwnerDAO;
 import DAOs.OwnerImpl;
 import Entities.Vehicle;
+import Utilities.Menu;
+
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -10,19 +12,10 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        Scanner in = new Scanner(System.in);
-        System.out.println("Enter first name: " );
-        String firstName = in.nextLine();
-        System.out.println("Enter last name: " );
-        String lastName = in.nextLine();
-
-        OwnerDAO owner = new OwnerImpl();
-
-
-        for(Vehicle v : owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName).getVehicles()){
-            System.out.println(v.getPlate());
-
-        }
+        int mainMenuSelection = -1;
+        do{
+            mainMenuSelection = Menu.runMainMenu();
+        }while(mainMenuSelection != Menu.getExitCondition());
 
         //ValidationUtils.validateNumberOfDays();
 

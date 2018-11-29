@@ -1,8 +1,15 @@
 package Utilities;
-
+import DAOs.VehicleImpl;
+import Entities.Vehicle;
+import DAOs.VehicleDAO;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -52,5 +59,35 @@ public class CSVUtils{
        sb.append("\n");
        w.append(sb.toString());
     }
+
+    public static void createCSVFile(int nextDays) throws IOException{
+        String PATH = "C://";
+        String directoryName = PATH.concat("ProjectFutureFolder");
+        FileWriter writer = null;
+        try{
+            File directory = new File(directoryName);
+            if (! directory.exists()){
+                directory.mkdir();
+                // If you require it to make the entire directory path including parents,
+                // use directory.mkdirs(); here instead.
+            }
+            writer = new FileWriter(directoryName + "/" + CSVUtils.fileName());
+
+            CSVUtils.writeLine(writer, Arrays.asList("Plate"));
+            VehicleDAO vehicle = new VehicleImpl();
+            for(Vehicle v : vehicle.getListOfVehiclesExp(nextDays)){
+                List<String> plates = new ArrayList<>();
+                plates.add(v.getPlate());
+
+                CSVUtils.writeLine(writer, plates);
+            }
+
+        }catch(SQLException e){}
+        finally{
+            writer.flush();
+            writer.close();
+        }
+    }
+
 
 }

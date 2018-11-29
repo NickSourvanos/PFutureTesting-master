@@ -2,6 +2,7 @@ package DBUtils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class DatabaseConnection {
 
@@ -10,15 +11,7 @@ public class DatabaseConnection {
             "useJDBCCompliantTimezoneShift=true" +
             "&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
-    public static Connection getDatabaseConnection() throws ClassNotFoundException{
-
-        Connection connection = null;
-
-        try {
-            connection = DriverManager.getConnection(URL);
-
-        }catch(Exception e){ System.out.println(e);}
-
-        return connection;
+    public static Connection getDatabaseConnection() throws SQLException {
+        return DriverManager.getConnection(URL);
     }
 }

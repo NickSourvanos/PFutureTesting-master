@@ -16,25 +16,25 @@ public class VehicleImpl implements VehicleDAO{
 
     public List<Vehicle> getListOfVehiclesExp(int numberOfDays) throws SQLException {
 
-        Connection connection = null;
         List<Vehicle> vehicles = new ArrayList<>();
         String date = DateUtils.getDate(numberOfDays);
         String query = "SELECT V.PLATE, I.EXPIRATION_DATE FROM INSURANCE I\n" +
                 "INNER JOIN INSURANCE_VEHICLE IV ON(I.ID = IV.INSURANCE_ID)\n" +
                 "INNER JOIN VEHICLE V ON(V.ID = IV.VEHICLE_ID)\n" +
                 "WHERE \"" + date + "\" >= CURRENT_DATE();";
-        try{
-            connection = DatabaseConnection.getDatabaseConnection();
-            Statement statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(query);
+
+        ResultSet set = null;
+        try(Statement connection = DatabaseConnection.getDatabaseConnection().createStatement()){
+
+
+            set = connection.executeQuery(query);
             while(set.next()){
                 vehicles.add(new Vehicle(set.getString(1),
                         set.getDate(2)));
             }
             Collections.sort(vehicles);
 
-        }catch(ClassNotFoundException e){}
-        finally { connection.close(); }
+        }finally { set.close(); }
 
         return vehicles;
     }
@@ -43,24 +43,21 @@ public class VehicleImpl implements VehicleDAO{
     public List<Vehicle> getListOfOUninsuredVehicles()
             throws SQLException {
 
-        Connection connection = null;
         List<Vehicle> vehicles = new ArrayList<>();
         String query = "SELECT PLATE FROM OWNER O\n" +
                 " INNER JOIN VEHICLE V ON(O.ID = V.OWNER_ID)\n" +
                 " INNER JOIN INSURANCE_VEHICLE IV ON(IV.VEHICLE_ID = V.ID)\n" +
                 " WHERE IV.INSURANCE_ID IS NULL;";
-        try{
-            connection = DatabaseConnection.getDatabaseConnection();
+        ResultSet set = null;
 
-            Statement statement = connection.createStatement();
-            ResultSet set = statement.executeQuery(query);
+        try(Statement connection = DatabaseConnection.getDatabaseConnection().createStatement()){
+
+            set = connection.executeQuery(query);
             while(set.next()){
                 vehicles.add(new Vehicle(set.getString(1)));
             }
 
-
-        }catch(ClassNotFoundException e){}
-        finally { connection.close(); }
+        } finally { set.close(); }
 
 
         return vehicles;

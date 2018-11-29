@@ -21,4 +21,15 @@ public class ValidationUtils {
 
     }
 
+    public static boolean validPlate(String plate){
+        final String PATTERN = "[A-Z]{3}-[1-9]{4}";
+
+        if (plate.matches(PATTERN)){
+            return true;
+        } else {
+            System.out.println("\t\tInvalid Plate Number");
+            return false;
+        }
+    }
+
 }
