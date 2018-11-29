@@ -6,6 +6,7 @@ import DAOs.VehicleDAO;
 import DAOs.VehicleImpl;
 import Entities.Vehicle;
 import Utilities.Menu;
+import Utilities.ValidationUtils;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -15,10 +16,12 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        int mainMenuSelection = -1;
-        do{
-            mainMenuSelection = Menu.runMainMenu();
-        }while(mainMenuSelection != Menu.getExitCondition());
+        double fine = ValidationUtils.getFine();
+
+//        int mainMenuSelection = -1;
+//        do{
+//            mainMenuSelection = Menu.runMainMenu();
+//        }while(mainMenuSelection != Menu.getExitCondition());
 
         //ValidationUtils.validateNumberOfDays();
 

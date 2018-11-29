@@ -73,13 +73,10 @@ public class Menu {
                 break;
             case 4:
                 try{
-                    Scanner inp = new Scanner(System.in);
-                    System.out.println("Enter first name: " );
-                    String firstName = inp.nextLine();
-                    System.out.println("Enter last name: " );
-                    String lastName = inp.nextLine();
-                    System.out.println("Enter fine: ");
-                    double fine = inp.nextDouble();
+                    String firstName = ValidationUtils.getName("first");
+                    String lastName = ValidationUtils.getName("last");
+                    double fine = ValidationUtils.getFine();
+
                     OwnerDAO owner = new OwnerImpl();
                     Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
 
