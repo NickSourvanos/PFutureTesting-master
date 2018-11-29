@@ -1,25 +1,65 @@
 
-import DAOs.InsuranceDAO;
-import DAOs.VehicleDAO;
 
+import DAOs.OwnerDAO;
+import DAOs.OwnerImpl;
 import Entities.Vehicle;
-import Utilities.CSVUtils;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.FilterWriter;
-import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        createCSVFile();
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter first name: " );
+        String firstName = in.nextLine();
+        System.out.println("Enter last name: " );
+        String lastName = in.nextLine();
+
+        OwnerDAO owner = new OwnerImpl();
+
+
+        for(Vehicle v : owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName).getVehicles()){
+            System.out.println(v.getPlate());
+
+        }
+
+        //ValidationUtils.validateNumberOfDays();
+
+        /*Scanner in = new Scanner(System.in);
+        System.out.println("Enter first name: " );
+        String firstName = in.nextLine();
+        System.out.println("Enter last name: " );
+        String lastName = in.nextLine();
+        System.out.println("Enter fine: ");
+        double fine = in.nextDouble();
+        Owner owner = OwnerDAO.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
+        System.out.println(owner.getFirstName() + ", " + owner.getLastName());
+        System.out.println("Plates: ");
+
+        for(Vehicle v : owner.getVehicles()){
+            System.out.println(v.getPlate());
+
+        }
+        System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, owner.getVehicles().size()));
+
+        //createCSVFile();
+        /*Scanner in = new Scanner(System.in);
+        System.out.println("Enter first name: " );
+        String firstName = in.nextLine();
+        System.out.println("Enter last name: " );
+        String lastName = in.nextLine();
+
+        Owner owner = OwnerDAO.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
+        System.out.println("First Name: " + owner.getFirstName());
+        System.out.println("Last Name: " + owner.getLastName());
+
+        for(Vehicle vehicle : owner.getVehicles()){
+            System.out.println("Vehicle: " + vehicle.getPlate());
+        }*/
+
+
+
 /*
         Scanner in = new Scanner(System.in);
         System.out.println("Enter the number of days: ");
@@ -74,7 +114,7 @@ public class Main {
         //System.out.println("Response: " + InsuranceDAO.getInsuranceStatus("ASD-1234"));
 
     }
-
+/*
     public static void createCSVFile(){
         String PATH = "C://";
         String directoryName = PATH.concat("ProjectFutureFolder");
@@ -103,5 +143,5 @@ public class Main {
 
         }catch(IOException | SQLException e){}
     }
-
+*/
 }
