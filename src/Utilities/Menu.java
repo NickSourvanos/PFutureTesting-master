@@ -18,10 +18,8 @@
 
 package Utilities;
 
-import DAOs.InsuranceDAO;
-import DAOs.InsuranceImpl;
-import DAOs.VehicleDAO;
-import DAOs.VehicleImpl;
+import DAOs.*;
+import Entities.Owner;
 import Entities.Vehicle;
 
 import java.io.IOException;
@@ -50,8 +48,8 @@ public class Menu {
                 String candidatePlate = in.nextLine().trim();
                 if(ValidationUtils.validPlate(candidatePlate)){
                     try {
-                        InsuranceDAO insuranse = new InsuranceImpl();
-                        if (insuranse.getInsuranceStatus(candidatePlate)) {
+                        InsuranceDAO insurance = new InsuranceImpl();
+                        if (insurance.getInsuranceStatus(candidatePlate)) {
                             System.out.println("\t\t\tActive Insurance");
                         } else {
                             System.out.println("\t\t\tExpired Insurance");
@@ -65,10 +63,37 @@ public class Menu {
                 runExportTypeMenu();
                 break;
             case 3:
-                System.out.println("\tYou printed 3");
+                try{
+                    VehicleDAO plates = new VehicleImpl();
+                    for(Vehicle v : plates.getListOfOUninsuredVehicles()){
+                        System.out.println(v.getPlate());
+                    }
+                }catch(SQLException e){}
+
                 break;
             case 4:
-                System.out.println("\tYou printed 4");
+                try{
+                    Scanner inp = new Scanner(System.in);
+                    System.out.println("Enter first name: " );
+                    String firstName = inp.nextLine();
+                    System.out.println("Enter last name: " );
+                    String lastName = inp.nextLine();
+                    System.out.println("Enter fine: ");
+                    double fine = inp.nextDouble();
+                    OwnerDAO owner = new OwnerImpl();
+                    Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
+
+                    System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
+                    System.out.println("Plates: ");
+
+                    for(Vehicle v : ownerObj.getVehicles()){
+                        System.out.println(v.getPlate());
+
+                    }
+                    System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
+
+                }catch(SQLException e){}
+
                 break;
             case 5:
                 System.out.println("\tExiting Program ...");

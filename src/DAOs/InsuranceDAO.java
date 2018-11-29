@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public interface InsuranceDAO {
 
-    public boolean getInsuranceStatus(String plate) throws SQLException;
+    boolean getInsuranceStatus(String plate) throws SQLException;
 
 
 

@@ -40,8 +40,7 @@ public class VehicleImpl implements VehicleDAO{
     }
 
     @Override
-    public List<Vehicle> getListOfOUninsuredVehicles()
-            throws SQLException {
+    public List<Vehicle> getListOfOUninsuredVehicles() throws SQLException {
 
         List<Vehicle> vehicles = new ArrayList<>();
         String query = "SELECT PLATE FROM OWNER O\n" +
@@ -56,6 +55,8 @@ public class VehicleImpl implements VehicleDAO{
             while(set.next()){
                 vehicles.add(new Vehicle(set.getString(1)));
             }
+
+            Collections.sort(vehicles);
 
         } finally { set.close(); }
 

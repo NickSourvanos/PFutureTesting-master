@@ -2,10 +2,13 @@
 
 import DAOs.OwnerDAO;
 import DAOs.OwnerImpl;
+import DAOs.VehicleDAO;
+import DAOs.VehicleImpl;
 import Entities.Vehicle;
 import Utilities.Menu;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
