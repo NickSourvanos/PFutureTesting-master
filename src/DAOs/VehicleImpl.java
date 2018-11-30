@@ -21,8 +21,7 @@ public class VehicleImpl implements VehicleDAO{
         String query = "SELECT V.PLATE, I.EXPIRATION_DATE FROM INSURANCE I\n" +
                 "INNER JOIN INSURANCE_VEHICLE IV ON(I.ID = IV.INSURANCE_ID)\n" +
                 "INNER JOIN VEHICLE V ON(V.ID = IV.VEHICLE_ID)\n" +
-                "WHERE \"" + date + "\" >= CURRENT_DATE();";
-
+                "WHERE I.EXPIRATION_DATE BETWEEN CURRENT_DATE() AND \"" + date + "\";";
         ResultSet set = null;
         try(Statement connection = DatabaseConnection.getDatabaseConnection().createStatement()){
 
@@ -33,7 +32,7 @@ public class VehicleImpl implements VehicleDAO{
                         set.getDate(2)));
             }
             Collections.sort(vehicles);
-
+            System.out.println();
         }finally { set.close(); }
 
         return vehicles;

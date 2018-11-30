@@ -16,12 +16,12 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
 
-        double fine = ValidationUtils.getFine();
 
-//        int mainMenuSelection = -1;
-//        do{
-//            mainMenuSelection = Menu.runMainMenu();
-//        }while(mainMenuSelection != Menu.getExitCondition());
+
+       int mainMenuSelection = -1;
+       do{
+          mainMenuSelection = Menu.runMainMenu();
+       }while(mainMenuSelection != Menu.getExitCondition());
 
         //ValidationUtils.validateNumberOfDays();
 

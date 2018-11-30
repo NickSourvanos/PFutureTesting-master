@@ -81,6 +81,7 @@ public class CSVUtils{
 
                 CSVUtils.writeLine(writer, plates);
             }
+            System.out.println("\t\t\tFile created successfully!");
 
         }catch(SQLException e){}
         finally{

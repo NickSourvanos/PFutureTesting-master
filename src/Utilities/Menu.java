@@ -125,7 +125,8 @@ public class Menu {
 
                 try {
                     for (Vehicle v : vehicles) {
-                        System.out.println("\t\t\t" + v.getPlate());
+                        System.out.println("\t\t\tPlate: " + v.getPlate() + ", " +
+                                "Expiration Date: " + v.getExpirationDate());
                     }
                 } catch (NullPointerException e){ System.out.println("\t\t\tEntry not found");}
                 break;
