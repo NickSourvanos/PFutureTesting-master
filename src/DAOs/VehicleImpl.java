@@ -43,9 +43,14 @@ public class VehicleImpl implements VehicleDAO{
 
         List<Vehicle> vehicles = new ArrayList<>();
         String query = "SELECT PLATE FROM OWNER O\n" +
-                " INNER JOIN VEHICLE V ON(O.ID = V.OWNER_ID)\n" +
-                " INNER JOIN INSURANCE_VEHICLE IV ON(IV.VEHICLE_ID = V.ID)\n" +
-                " WHERE IV.INSURANCE_ID IS NULL;";
+                "\tINNER JOIN VEHICLE V ON(O.ID = V.OWNER_ID)\n" +
+                "    INNER JOIN INSURANCE_VEHICLE IV ON(IV.VEHICLE_ID = V.ID)\n" +
+                "    WHERE IV.INSURANCE_ID IS NULL\n" +
+                "UNION\n" +
+                "SELECT PLATE FROM VEHICLE V \n" +
+                "INNER JOIN INSURANCE_VEHICLE IV ON (V.ID = IV.VEHICLE_ID)\n" +
+                "INNER JOIN INSURANCE I ON (I.ID = IV.INSURANCE_ID)\n" +
+                "WHERE I.EXPIRATION_DATE < CURRENT_DATE();\n";
         ResultSet set = null;
 
         try(Statement connection = DatabaseConnection.getDatabaseConnection().createStatement()){

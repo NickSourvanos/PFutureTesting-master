@@ -93,7 +93,7 @@ public class Menu {
                         System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
 
                     }else {
-                        System.out.println("User does not exist!");
+                        System.out.println("There are no uninsured vehicles or user does not exist!");
                     }
 
 
