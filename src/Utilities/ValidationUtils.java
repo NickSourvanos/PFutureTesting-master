@@ -1,7 +1,17 @@
 package Utilities;
 
+import DBUtils.DatabaseConnection;
+import Entities.Owner;
+import Entities.Vehicle;
+import ExceptionUtils.NameNotFoundException;
+
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.zip.DataFormatException;
 
@@ -22,6 +32,29 @@ public class ValidationUtils {
 
         return true;
 
+    }
+
+    public static boolean checkIfNameExists(String firstName, String lastName) throws NameNotFoundException {
+
+        boolean flag = false;
+
+        String query = "SELECT FIRST_NAME, LAST_NAME FROM OWNER O\n" +
+                " WHERE FIRST_NAME = \""+ firstName + "\" AND LAST_NAME = \""
+                + lastName + "\";";
+
+        try(ResultSet set = DatabaseConnection.getDatabaseConnection().createStatement().executeQuery(query)){
+
+            while(set.next()){
+                if(set != null){
+                    flag = true;
+                }
+                else{
+                    throw new NameNotFoundException();
+
+                }
+            }
+        }catch(SQLException e){}
+        return flag;
     }
 
     public static boolean validPlate(String plate){

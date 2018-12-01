@@ -21,6 +21,7 @@ package Utilities;
 import DAOs.*;
 import Entities.Owner;
 import Entities.Vehicle;
+import ExceptionUtils.NameNotFoundException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -75,21 +76,29 @@ public class Menu {
                 try{
                     String firstName = ValidationUtils.getName("first");
                     String lastName = ValidationUtils.getName("last");
-                    double fine = ValidationUtils.getFine();
 
-                    OwnerDAO owner = new OwnerImpl();
-                    Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
+                    if(ValidationUtils.checkIfNameExists(firstName, lastName)){
+                        double fine = ValidationUtils.getFine();
 
-                    System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
-                    System.out.println("Plates: ");
+                        OwnerDAO owner = new OwnerImpl();
+                        Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
 
-                    for(Vehicle v : ownerObj.getVehicles()){
-                        System.out.println(v.getPlate());
+                        System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
+                        System.out.println("Plates: ");
 
+                        for(Vehicle v : ownerObj.getVehicles()){
+                            System.out.println(v.getPlate());
+
+                        }
+                        System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
+
+                    }else {
+                        System.out.println("User does not exist!");
                     }
-                    System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
 
-                }catch(SQLException e){}
+
+
+                }catch(SQLException | NameNotFoundException e){}
 
                 break;
             case 5:
