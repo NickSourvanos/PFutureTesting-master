@@ -21,6 +21,7 @@ package Utilities;
 import DAOs.*;
 import Entities.Owner;
 import Entities.Vehicle;
+import ExceptionUtils.InvalidUserInputException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -43,20 +44,18 @@ public class Menu {
         /* get functionMenuChoice value and operate */
         switch (mainMenuSelection) {
             case 1:
-                System.out.print("\t\tPlease insert Vehicle's Plate Number: ");
-                Scanner in = new Scanner(System.in);
-                String candidatePlate = in.nextLine().trim();
-                if(ValidationUtils.validPlate(candidatePlate)){
-                    try {
-                        InsuranceDAO insurance = new InsuranceImpl();
-                        if (insurance.getInsuranceStatus(candidatePlate)) {
-                            System.out.println("\t\t\tActive Insurance");
-                        } else {
-                            System.out.println("\t\t\tExpired Insurance");
-                        }
-                    } catch(SQLException e){
-                        e.printStackTrace();
+                try {
+                    String plateNumber = ValidationUtils.readPlateNumber();
+                    InsuranceDAO insurance = new InsuranceImpl();
+                    if (insurance.getInsuranceStatus(plateNumber)) {
+                        System.out.println("\t\t\tActive Insurance");
+                    } else {
+                        System.out.println("\t\t\tExpired Insurance");
                     }
+                }catch(InvalidUserInputException e){
+                    System.out.println("\t\t\t Error: Invalid Plate format. Expected format: 'ABC-1234'");
+                } catch(SQLException e){
+                    e.printStackTrace();
                 }
                 break;
             case 2:
@@ -72,7 +71,9 @@ public class Menu {
 
                 break;
             case 4:
-                try{
+                try {
+                    //TODO: add custom exception package
+
                     String firstName = ValidationUtils.getName("first");
                     String lastName = ValidationUtils.getName("last");
                     double fine = ValidationUtils.getFine();
@@ -83,12 +84,11 @@ public class Menu {
                     System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
                     System.out.println("Plates: ");
 
-                    for(Vehicle v : ownerObj.getVehicles()){
+                    for (Vehicle v : ownerObj.getVehicles()) {
                         System.out.println(v.getPlate());
 
                     }
                     System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
-
                 }catch(SQLException e){}
 
                 break;
@@ -167,4 +167,12 @@ public class Menu {
 
         return selection;
     }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+
+
 }

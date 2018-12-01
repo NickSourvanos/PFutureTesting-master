@@ -1,5 +1,7 @@
 package Utilities;
 
+import ExceptionUtils.InvalidUserInputException;
+
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -24,13 +26,26 @@ public class ValidationUtils {
 
     }
 
-    public static boolean validPlate(String plate){
+    public static String readPlateNumber() throws InvalidUserInputException {
+
+        System.out.print("\t\tPlease insert Vehicle's Plate Number: ");
+        Scanner input = new Scanner(System.in);
+        String candidatePlate = input.nextLine().trim();
+
+        if(!validPlate(candidatePlate)){
+           throw new InvalidUserInputException();
+        }else{
+            return candidatePlate;
+        }
+    }
+
+
+    private static boolean validPlate(String plate) {
         final String PATTERN = "[A-Z]{3}-[1-9]{4}";
 
         if (plate.trim().matches(PATTERN)){
             return true;
         } else {
-            System.out.println("\t\tInvalid Plate Number");
             return false;
         }
     }

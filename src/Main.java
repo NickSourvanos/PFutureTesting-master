@@ -1,25 +1,20 @@
 
 
-import DAOs.OwnerDAO;
-import DAOs.OwnerImpl;
-import DAOs.VehicleDAO;
-import DAOs.VehicleImpl;
-import Entities.Vehicle;
+import ExceptionUtils.InvalidUserInputException;
 import Utilities.Menu;
-import Utilities.ValidationUtils;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, InvalidUserInputException {
 
 
+       //throw new InvalidUserInputException();
 
        int mainMenuSelection = -1;
        do{
+          Menu.clearScreen();
           mainMenuSelection = Menu.runMainMenu();
        }while(mainMenuSelection != Menu.getExitCondition());
 
