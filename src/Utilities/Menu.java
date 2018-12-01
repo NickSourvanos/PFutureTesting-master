@@ -21,6 +21,7 @@ package Utilities;
 import DAOs.*;
 import Entities.Owner;
 import Entities.Vehicle;
+import ExceptionUtils.InvalidUserInputException;
 import ExceptionUtils.NameNotFoundException;
 
 import java.io.IOException;
@@ -44,20 +45,18 @@ public class Menu {
         /* get functionMenuChoice value and operate */
         switch (mainMenuSelection) {
             case 1:
-                System.out.print("\t\tPlease insert Vehicle's Plate Number: ");
-                Scanner in = new Scanner(System.in);
-                String candidatePlate = in.nextLine().trim();
-                if(ValidationUtils.validPlate(candidatePlate)){
-                    try {
-                        InsuranceDAO insurance = new InsuranceImpl();
-                        if (insurance.getInsuranceStatus(candidatePlate)) {
-                            System.out.println("\t\t\tActive Insurance");
-                        } else {
-                            System.out.println("\t\t\tExpired Insurance");
-                        }
-                    } catch(SQLException e){
-                        e.printStackTrace();
+                try {
+                    String plateNumber = ValidationUtils.readPlateNumber();
+                    InsuranceDAO insurance = new InsuranceImpl();
+                    if (insurance.getInsuranceStatus(plateNumber)) {
+                        System.out.println("\t\t\tActive Insurance");
+                    } else {
+                        System.out.println("\t\t\tExpired Insurance");
                     }
+                }catch(InvalidUserInputException e){
+                    System.out.println("\t\t\t Error: Invalid Plate format. Expected format: 'ABC-1234'");
+                } catch(SQLException e){
+                    e.printStackTrace();
                 }
                 break;
             case 2:
@@ -73,7 +72,9 @@ public class Menu {
 
                 break;
             case 4:
-                try{
+                try {
+                    //TODO: add custom exception package
+
                     String firstName = ValidationUtils.getName("first");
                     String lastName = ValidationUtils.getName("last");
 
@@ -83,23 +84,19 @@ public class Menu {
                         OwnerDAO owner = new OwnerImpl();
                         Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
 
+                    for (Vehicle v : ownerObj.getVehicles()) {
+                        System.out.println(v.getPlate());
                         System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
                         System.out.println("Plates: ");
-
-                        for(Vehicle v : ownerObj.getVehicles()){
-                            System.out.println(v.getPlate());
-
                         }
-                        System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
-
+                        System.out.println("\t\t\tTotal fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
                     }else {
+
                         System.out.println("There are no uninsured vehicles or user does not exist!");
+
+
                     }
-
-
-
                 }catch(SQLException | NameNotFoundException e){}
-
                 break;
             case 5:
                 System.out.println("\tExiting Program ...");
@@ -170,7 +167,7 @@ public class Menu {
             try {
                 selection = Integer.parseInt(input.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid Selection");
+                System.out.println("\t\t\tInvalid Selection");
             }
         }while(selection < minSelection | maxSelection < selection);
 

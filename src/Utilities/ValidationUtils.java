@@ -1,19 +1,13 @@
 package Utilities;
 
+import ExceptionUtils.InvalidUserInputException;
+
 import DBUtils.DatabaseConnection;
-import Entities.Owner;
-import Entities.Vehicle;
 import ExceptionUtils.NameNotFoundException;
 
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
-import java.util.zip.DataFormatException;
 
 public class ValidationUtils {
 
@@ -33,6 +27,20 @@ public class ValidationUtils {
         return true;
 
     }
+
+    public static String readPlateNumber() throws InvalidUserInputException {
+
+        System.out.print("\t\tPlease insert Vehicle's Plate Number: ");
+        Scanner input = new Scanner(System.in);
+        String candidatePlate = input.nextLine().trim();
+
+        if(!validPlate(candidatePlate)){
+           throw new InvalidUserInputException();
+        }else{
+            return candidatePlate;
+        }
+    }
+
 
     public static boolean checkIfNameExists(String firstName, String lastName) throws NameNotFoundException {
 
@@ -57,13 +65,12 @@ public class ValidationUtils {
         return flag;
     }
 
-    public static boolean validPlate(String plate){
+    private static boolean validPlate(String plate){
         final String PATTERN = "[A-Z]{3}-[1-9]{4}";
 
         if (plate.trim().matches(PATTERN)){
             return true;
         } else {
-            System.out.println("\t\tInvalid Plate Number");
             return false;
         }
     }
@@ -74,13 +81,13 @@ public class ValidationUtils {
         boolean validName;
 
         do {
-            System.out.println("Enter " + nameType + " name: ");
+            System.out.print("\t\t\tEnter " + nameType + " name: ");
 
             Scanner inp = new Scanner(System.in);
             name = inp.nextLine();
             validName = name.trim().matches(PATTERN);
             if(!validName){
-                System.out.println("Invalid input! Please enter a "+ nameType+ " using only letters (spaces are allowed).");
+                System.out.println("\t\t\tInvalid input! Please enter a "+ nameType + " using only letters (spaces are allowed).");
             }
         }while (!validName);
 
@@ -91,7 +98,7 @@ public class ValidationUtils {
         double fine;
         do {
             try {
-                System.out.println("Enter fine: ");
+                System.out.print("\t\t\tEnter fine: ");
                 Scanner inp = new Scanner(System.in);
                 fine = Double.parseDouble(inp.nextLine().trim());
                 return fine;
