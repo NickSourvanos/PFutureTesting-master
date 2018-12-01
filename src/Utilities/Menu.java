@@ -85,9 +85,9 @@ public class Menu {
                         Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
 
                     for (Vehicle v : ownerObj.getVehicles()) {
-                        System.out.println(v.getPlate());
-                        System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
-                        System.out.println("Plates: ");
+                        System.out.println("\t\t\tPlates: " + v.getPlate());
+
+
                         }
                         System.out.println("\t\t\tTotal fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
                     }else {
