@@ -14,7 +14,6 @@ public class Main {
 
        int mainMenuSelection = -1;
        do{
-          Menu.clearScreen();
           mainMenuSelection = Menu.runMainMenu();
        }while(mainMenuSelection != Menu.getExitCondition());
 

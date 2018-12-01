@@ -22,6 +22,7 @@ import DAOs.*;
 import Entities.Owner;
 import Entities.Vehicle;
 import ExceptionUtils.InvalidUserInputException;
+import ExceptionUtils.NameNotFoundException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -76,21 +77,23 @@ public class Menu {
 
                     String firstName = ValidationUtils.getName("first");
                     String lastName = ValidationUtils.getName("last");
-                    double fine = ValidationUtils.getFine();
 
-                    OwnerDAO owner = new OwnerImpl();
-                    Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
+                    if(ValidationUtils.checkIfNameExists(firstName, lastName)){
+                        double fine = ValidationUtils.getFine();
 
-                    System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
-                    System.out.println("Plates: ");
+                        OwnerDAO owner = new OwnerImpl();
+                        Owner ownerObj = owner.getListOfOUninsuredVehiclesPerOwner(firstName, lastName);
 
                     for (Vehicle v : ownerObj.getVehicles()) {
                         System.out.println(v.getPlate());
-
+                        System.out.println(ownerObj.getFirstName() + ", " + ownerObj.getLastName());
+                        System.out.println("Plates: ");
+                        }
+                        System.out.println("\t\t\tTotal fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
+                    }else {
+                        System.out.println("\t\t\tUser does not exist!");
                     }
-                    System.out.println("Total fine cost: " + FineUtils.getTotalFineCost(fine, ownerObj.getVehicles().size()));
-                }catch(SQLException e){}
-
+                }catch(SQLException | NameNotFoundException e){}
                 break;
             case 5:
                 System.out.println("\tExiting Program ...");
@@ -161,18 +164,10 @@ public class Menu {
             try {
                 selection = Integer.parseInt(input.nextLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Invalid Selection");
+                System.out.println("\t\t\tInvalid Selection");
             }
         }while(selection < minSelection | maxSelection < selection);
 
         return selection;
     }
-
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-    }
-
-
-
 }
